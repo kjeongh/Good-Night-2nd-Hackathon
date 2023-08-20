@@ -17,6 +17,7 @@ import { MoviesModule } from './modules/movie/movies.module';
       database: 'hackathondb',
       entities: [Movie],
       synchronize: true,
+      logging: true,
     }),
     MoviesModule,
   ],
