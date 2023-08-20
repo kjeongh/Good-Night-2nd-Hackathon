@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  mysql:
+    container_name: mysql-con
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_USER_PASSWORD}
+      - TZ=Asia/Seoul
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql
