@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
-import { UpdateMovieDto, UpdateMovieResDto } from './dto/update-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Controller('/api/movies')
 export class MovieController {
