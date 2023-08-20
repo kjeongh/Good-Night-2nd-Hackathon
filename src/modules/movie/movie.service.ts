@@ -23,19 +23,14 @@ export class MovieService {
     }
   }
 
-  // async update(
-  //   id: number,
-  //   updateMovieDto: UpdateMovieResDto,
-  // ): Promise<UpdateResult> {
-  //   try {
-  //     const movie = await this.movieRepository.findOneByOrFail({ id });
-  //     const updatedMovie = { ...movie, updateMovieDto };
-  //
-  //     console.log(updatedMovie);
-  //
-  //     return await this.movieRepository.update(id, movie);
-  //   } catch (e) {
-  //     console.log(e); //TODO: 에러핸들링
-  //   }
-  // }
+  async update(id: number, updateMovieDto: UpdateMovieResDto): Promise<any> {
+    try {
+      const movie = await this.movieRepository.findOneByOrFail({ id });
+      const updatedMovie = { ...movie, ...updateMovieDto };
+
+      return await this.movieRepository.save(updatedMovie);
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
 }
