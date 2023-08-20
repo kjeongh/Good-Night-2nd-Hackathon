@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   Param,
   Patch,
@@ -10,6 +11,7 @@ import {
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { GetMovieResDto } from './dto/get-movie.dto';
 
 @Controller('/api/movies')
 export class MovieController {
@@ -39,5 +41,10 @@ export class MovieController {
     return await this.movieService.update(id, updateMovieDto);
   }
 
-  //
+  // 기능4: 영화 단일 조회
+  @Get()
+  @HttpCode(200)
+  async get(@Param('id') id: number): Promise<GetMovieResDto> {
+    return await this.movieService.get(id);
+  }
 }

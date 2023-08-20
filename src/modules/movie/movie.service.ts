@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { GetMovieResDto } from './dto/get-movie.dto';
 
 @Injectable()
 export class MovieService {
@@ -35,6 +36,16 @@ export class MovieService {
       const updatedMovie = { ...movie, ...updateMovieDto };
 
       return await this.movieRepository.save(updatedMovie);
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
+
+  async get(id: number): Promise<GetMovieResDto> {
+    try {
+      const movie = await this.movieRepository.findOneByOrFail({ id });
+
+      return Movie.toDto(movie);
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
