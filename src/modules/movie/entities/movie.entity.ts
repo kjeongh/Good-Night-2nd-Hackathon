@@ -9,26 +9,29 @@ export class Movie extends DateBase {
 
   @Column({
     length: 50,
+    nullable: false,
   })
   title: string;
 
-  @Column()
+  @Column({ nullable: false })
   description: string;
 
   @Column({
     type: 'enum',
     enum: Genre,
+    nullable: false,
   })
   genre: Genre;
 
   @Column({
     default: true,
+    nullable: false,
   })
   isShowing: boolean;
 
-  @Column()
+  @Column({ nullable: false })
   releaseDate: Date;
 
-  @Column()
+  @Column({ nullable: false })
   endDate: Date;
 }

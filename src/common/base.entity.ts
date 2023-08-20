@@ -1,7 +1,7 @@
 import { CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 export abstract class DateBase {
-  @CreateDateColumn()
+  @CreateDateColumn({ update: false })
   createdAt: Date;
 
   @UpdateDateColumn()
