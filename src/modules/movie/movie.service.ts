@@ -8,16 +8,22 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MovieService {
-  // repository
   constructor(
     @InjectRepository(Movie)
     private movieRepository: Repository<Movie>,
   ) {}
 
   async create(createMovieDto: CreateMovieDto): Promise<any> {
-    //TODO: any?
     try {
       return await this.movieRepository.save(createMovieDto);
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
+
+  async delete(id: number): Promise<any> {
+    try {
+      await this.movieRepository.softDelete({ id });
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }

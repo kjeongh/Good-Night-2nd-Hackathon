@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -14,7 +22,14 @@ export class MovieController {
     await this.movieService.create(createMovieDto);
   }
 
-  // 기능2: 영화 수정
+  // 기능2: 영화 삭제
+  @Delete('/:id')
+  @HttpCode(204)
+  async delete(@Param('id') id: number) {
+    await this.movieService.delete(id);
+  }
+
+  // 기능3: 영화 수정
   @Patch('/:id')
   @HttpCode(200)
   async update(
@@ -23,4 +38,6 @@ export class MovieController {
   ) {
     return await this.movieService.update(id, updateMovieDto);
   }
+
+  //
 }
