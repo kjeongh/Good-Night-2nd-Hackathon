@@ -8,6 +8,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { GetMovieResDto } from './dto/get-movie.dto';
 import { Genre } from './enums/movie.genre.enum';
 import { MovieRepository } from './movie.repository';
+import { count } from 'rxjs';
 
 @Injectable()
 export class MovieService {
@@ -67,17 +68,11 @@ export class MovieService {
     }
   }
 
-  // async getListPage(limit: number, page: number): Promise<any> {
-  //   try {
-  //     const [movies, count] = await this.movieRepository.findAndCountBy({
-  //       genre: genre as any,
-  //       isShowing: (isShowing ? 1 : 0) as any,
-  //     });
-  //     const movieInfoList = movies.map((movie) => Movie.toDto(movie));
-  //
-  //     return { count, movieInfoList };
-  //   } catch (e) {
-  //     console.log(e); //TODO: 에러핸들링
-  //   }
-  // }
+  async getListPage(): Promise<any> {
+    try {
+      return await this.movieRepository.getReviewList();
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
 }

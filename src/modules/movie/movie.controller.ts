@@ -44,7 +44,7 @@ export class MovieController {
   }
 
   // 기능4: 영화 단일 조회
-  @Get('/:id')
+  @Get('/{id:[\\d]+}')
   @HttpCode(200)
   async get(@Param('id') id: number): Promise<GetMovieResDto> {
     return await this.movieService.get(id);
@@ -61,12 +61,11 @@ export class MovieController {
   }
 
   // 기능 6: 영화 목록 평점순 조회 (페이지네이션)
-  // @Get('/rating')
-  // @HttpCode(200)
-  // async getListPage(
-  //   @Query('limit') limit: number,
-  //   @Query('page') page: number,
-  // ): Promise<Paginated<GetMovieResDto>> {
-  //   return await this.movieService.getListPage(limit, page);
-  // }
+  @Get('/rating')
+  @HttpCode(200)
+  async getListPage() // @Query('limit') limit: number,
+  // @Query('page') page: number,
+  : Promise<any> {
+    return await this.movieService.getListPage();
+  }
 }

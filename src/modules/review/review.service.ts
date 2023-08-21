@@ -31,11 +31,11 @@ export class ReviewService {
     try {
       const [reviewList, count] = await this.reviewRepository.findAndCount({
         where: { movie: { id: movieId }, rating: MoreThanOrEqual(minRating) },
-        relations: ['movie'],
+        relations: ['movie'], //TODO: movie 로드 ?
       });
 
       const filteredReviewList = reviewList.map((review) => review.toDto());
-      return { filteredReviewList, count };
+      return { count, filteredReviewList };
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
