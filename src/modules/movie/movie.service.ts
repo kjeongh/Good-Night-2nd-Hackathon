@@ -79,5 +79,5 @@ export class MovieService {
   //   } catch (e) {
   //     console.log(e); //TODO: 에러핸들링
   //   }
-  }
+  // }
 }

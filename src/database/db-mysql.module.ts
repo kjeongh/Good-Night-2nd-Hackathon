@@ -1,6 +1,7 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { Movie } from '../modules/movie/entities/movie.entity';
+import { Review } from '../modules/review/entities/review.entity';
 
 @Module({
   //TODO: 환경변수 분리
@@ -12,7 +13,7 @@ import { Movie } from '../modules/movie/entities/movie.entity';
       username: 'hackathon',
       password: '1012',
       database: 'hackathondb',
-      entities: [Movie],
+      entities: [Movie, Review],
       synchronize: true,
       logging: true,
     }),
