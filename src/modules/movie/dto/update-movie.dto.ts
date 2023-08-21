@@ -1,4 +1,4 @@
-import { Genre } from '../constants/movie.genre.enum';
+import { Genre } from '../enums/movie.genre.enum';
 
 export class UpdateMovieDto {
   title: string;

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { DateBase } from '../../../common/base.entity';
-import { Genre } from '../constants/movie.genre.enum';
+import { Genre } from '../enums/movie.genre.enum';
 import { GetMovieResDto } from '../dto/get-movie.dto';
 
 @Entity('movies')
