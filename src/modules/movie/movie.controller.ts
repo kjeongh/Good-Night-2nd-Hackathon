@@ -13,6 +13,7 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { GetMovieResDto } from './dto/get-movie.dto';
+import { Paginated } from 'nestjs-paginate';
 
 @Controller('/api/movies')
 export class MovieController {
@@ -60,12 +61,12 @@ export class MovieController {
   }
 
   // 기능 5: 영화 목록 평점순 조회 (페이지네이션)
-  // @Get('/list')
+  // @Get('/rating')
   // @HttpCode(200)
   // async getListPage(
-  //   @Query('genre') genre: string,
-  //   @Query('is-showing') isShowing: boolean,
-  // ): Promise<any> {
-  //   return await this.movieService.getList(genre, isShowing);
+  //   @Query('limit') limit: number,
+  //   @Query('page') page: number,
+  // ): Promise<Paginated<GetMovieResDto>> {
+  //   return await this.movieService.getListPage(limit, page);
   // }
 }
