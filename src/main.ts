@@ -8,9 +8,9 @@ async function bootstrap() {
   // Swagger 설정
   const config = new DocumentBuilder()
     .setTitle('Good-Night-2nd-Hackathon: NestJS')
-    .setDescription('The cats API description')
+    .setDescription('goot-night-2nd-hackathon NestJS sample')
     .setVersion('1.0')
-    .addTag('cats')
+    // .addTag('movies')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
