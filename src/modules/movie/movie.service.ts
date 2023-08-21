@@ -6,6 +6,7 @@ import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { GetMovieResDto } from './dto/get-movie.dto';
+import { Genre } from './constants/movie.genre.enum';
 
 @Injectable()
 export class MovieService {
@@ -46,6 +47,21 @@ export class MovieService {
       const movie = await this.movieRepository.findOneByOrFail({ id });
 
       return Movie.toDto(movie);
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
+
+  async getList(genre: string, isShowing: boolean): Promise<any> {
+    try {
+      //TODO: repository 확인
+      const [movies, count] = await this.movieRepository.findAndCountBy({
+        genre: genre as any,
+        isShowing: (isShowing ? 1 : 0) as any,
+      });
+      const movieInfoList = movies.map((movie) => Movie.toDto(movie));
+
+      return { count, movieInfoList };
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }

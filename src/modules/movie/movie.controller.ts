@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -46,5 +47,15 @@ export class MovieController {
   @HttpCode(200)
   async get(@Param('id') id: number): Promise<GetMovieResDto> {
     return await this.movieService.get(id);
+  }
+
+  // 기능 5: 영화 목록 조회
+  @Get('list')
+  @HttpCode(200)
+  async getList(
+    @Query('genre') genre: string,
+    @Query('is-showing') isShowing: boolean,
+  ): Promise<any> {
+    return await this.movieService.getList(genre, isShowing);
   }
 }
