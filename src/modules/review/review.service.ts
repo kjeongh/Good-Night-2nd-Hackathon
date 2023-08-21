@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 import { Review } from './entities/review.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { Movie } from '../movie/entities/movie.entity';
+import { MovieRepository } from '../movie/movie.repository';
 
 @Injectable()
 export class ReviewService {
@@ -11,8 +11,8 @@ export class ReviewService {
     @InjectRepository(Review)
     private reviewRepository: Repository<Review>,
 
-    @InjectRepository(Movie)
-    private movieRepository: Repository<Movie>,
+    @Inject('MOVIE_REPOSITORY')
+    private movieRepository: MovieRepository,
   ) {}
 
   async create(createReviewDto: CreateReviewDto): Promise<any> {
@@ -20,9 +20,22 @@ export class ReviewService {
       const movie = await this.movieRepository.findOneByOrFail({
         id: createReviewDto.movieId,
       });
-      return await this.reviewRepository.save(
-        CreateReviewDto.toEntity(createReviewDto, movie),
-      );
+      const entity = CreateReviewDto.toEntity(createReviewDto, movie);
+      return await this.reviewRepository.save(entity);
+    } catch (e) {
+      console.log(e); //TODO: 에러핸들링
+    }
+  }
+
+  async getList(movieId: number, minRating: number): Promise<any> {
+    try {
+      const [reviewList, count] = await this.reviewRepository.findAndCount({
+        where: { movie: { id: movieId }, rating: MoreThanOrEqual(minRating) },
+        relations: ['movie'],
+      });
+
+      const filteredReviewList = reviewList.map((review) => review.toDto());
+      return { filteredReviewList, count };
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }

@@ -60,7 +60,7 @@ export class MovieController {
     return await this.movieService.getList(genre, isShowing);
   }
 
-  // 기능 5: 영화 목록 평점순 조회 (페이지네이션)
+  // 기능 6: 영화 목록 평점순 조회 (페이지네이션)
   // @Get('/rating')
   // @HttpCode(200)
   // async getListPage(

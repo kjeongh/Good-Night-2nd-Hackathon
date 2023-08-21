@@ -6,11 +6,14 @@ export class CreateReviewDto {
   rating: number;
   content: string;
 
-  public static toEntity(dto: CreateReviewDto, movie: Movie): Review {
+  public static toEntity(
+    createReviewDto: CreateReviewDto,
+    movie: Movie,
+  ): Review {
     const review = new Review();
     review.movie = movie;
-    review.rating = dto.rating;
-    review.content = dto.content;
+    review.rating = createReviewDto.rating;
+    review.content = createReviewDto.content;
 
     return review;
   }

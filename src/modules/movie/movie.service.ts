@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -7,12 +7,13 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { GetMovieResDto } from './dto/get-movie.dto';
 import { Genre } from './enums/movie.genre.enum';
+import { MovieRepository } from './movie.repository';
 
 @Injectable()
 export class MovieService {
   constructor(
-    @InjectRepository(Movie)
-    private movieRepository: Repository<Movie>,
+    @Inject('MOVIE_REPOSITORY')
+    private movieRepository: MovieRepository,
   ) {}
 
   async create(createMovieDto: CreateMovieDto): Promise<any> {
@@ -54,7 +55,6 @@ export class MovieService {
 
   async getList(genre: string, isShowing: boolean): Promise<any> {
     try {
-      //TODO: repository 확인
       const [movies, count] = await this.movieRepository.findAndCountBy({
         genre: genre as any,
         isShowing: (isShowing ? 1 : 0) as any,
