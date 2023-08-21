@@ -43,14 +43,14 @@ export class MovieController {
   }
 
   // 기능4: 영화 단일 조회
-  @Get()
+  @Get('/:id')
   @HttpCode(200)
   async get(@Param('id') id: number): Promise<GetMovieResDto> {
     return await this.movieService.get(id);
   }
 
   // 기능 5: 영화 목록 조회
-  @Get('list')
+  @Get()
   @HttpCode(200)
   async getList(
     @Query('genre') genre: string,
@@ -58,4 +58,14 @@ export class MovieController {
   ): Promise<any> {
     return await this.movieService.getList(genre, isShowing);
   }
+
+  // 기능 5: 영화 목록 평점순 조회 (페이지네이션)
+  // @Get('/list')
+  // @HttpCode(200)
+  // async getListPage(
+  //   @Query('genre') genre: string,
+  //   @Query('is-showing') isShowing: boolean,
+  // ): Promise<any> {
+  //   return await this.movieService.getList(genre, isShowing);
+  // }
 }
