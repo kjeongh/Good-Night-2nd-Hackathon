@@ -12,8 +12,9 @@ import {
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { GetMovieResDto } from './dto/get-movie.dto';
+import { GetMovieDto } from './dto/get-movie.dto';
 import { Paginated } from 'nestjs-paginate';
+import { Genre } from './enums/movie.genre.enum';
 
 @Controller('/api/movies')
 export class MovieController {
@@ -44,9 +45,9 @@ export class MovieController {
   }
 
   // 기능4: 영화 단일 조회
-  @Get('/{id:[\\d]+}')
+  @Get('/:id([\\d]+)')
   @HttpCode(200)
-  async get(@Param('id') id: number): Promise<GetMovieResDto> {
+  async get(@Param('id') id: number): Promise<GetMovieDto> {
     return await this.movieService.get(id);
   }
 
@@ -54,7 +55,7 @@ export class MovieController {
   @Get()
   @HttpCode(200)
   async getList(
-    @Query('genre') genre: string,
+    @Query('genre') genre: Genre,
     @Query('is-showing') isShowing: boolean,
   ): Promise<any> {
     return await this.movieService.getList(genre, isShowing);

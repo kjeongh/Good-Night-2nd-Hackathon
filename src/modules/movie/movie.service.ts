@@ -5,10 +5,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
-import { GetMovieResDto } from './dto/get-movie.dto';
+import { GetMovieDto } from './dto/get-movie.dto';
 import { Genre } from './enums/movie.genre.enum';
 import { MovieRepository } from './movie.repository';
-import { count } from 'rxjs';
+import { async, count } from 'rxjs';
 
 @Injectable()
 export class MovieService {
@@ -17,15 +17,16 @@ export class MovieService {
     private movieRepository: MovieRepository,
   ) {}
 
-  async create(createMovieDto: CreateMovieDto): Promise<any> {
+  async create(createMovieDto: CreateMovieDto): Promise<Movie> {
     try {
-      return await this.movieRepository.save(createMovieDto);
+      const entity = CreateMovieDto.toEntity(createMovieDto);
+      return Promise.resolve(await this.movieRepository.save(entity));
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
   }
 
-  async delete(id: number): Promise<any> {
+  async delete(id: number) {
     try {
       await this.movieRepository.softDelete({ id });
     } catch (e) {
@@ -33,36 +34,38 @@ export class MovieService {
     }
   }
 
-  async update(id: number, updateMovieDto: UpdateMovieDto): Promise<any> {
+  async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     try {
       const movie = await this.movieRepository.findOneByOrFail({ id });
-      const updatedMovie = { ...movie, ...updateMovieDto };
+      movie.update(updateMovieDto);
 
-      return await this.movieRepository.save(updatedMovie);
+      return Promise.resolve(await this.movieRepository.save(movie));
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
   }
 
-  async get(id: number): Promise<GetMovieResDto> {
+  async get(id: number): Promise<GetMovieDto> {
     try {
       const movie = await this.movieRepository.findOneByOrFail({ id });
 
-      return Movie.toDto(movie);
+      return Promise.resolve(GetMovieDto.of(movie));
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
   }
 
-  async getList(genre: string, isShowing: boolean): Promise<any> {
+  async getList(genre: Genre, isShowing: boolean): Promise<any> {
     try {
-      const [movies, count] = await this.movieRepository.findAndCountBy({
-        genre: genre as any,
-        isShowing: (isShowing ? 1 : 0) as any,
+      const [movies, count] = await this.movieRepository.findAndCount({
+        where: {
+          genre,
+          isShowing,
+        },
       });
-      const movieInfoList = movies.map((movie) => Movie.toDto(movie));
+      const movieInfoList = movies.map((movie) => GetMovieDto.of(movie));
 
-      return { count, movieInfoList };
+      return Promise.resolve({ count, movieInfoList });
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
@@ -70,7 +73,7 @@ export class MovieService {
 
   async getListPage(): Promise<any> {
     try {
-      return await this.movieRepository.getReviewList();
+      return Promise.resolve(await this.movieRepository.getMovieAvgList());
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }

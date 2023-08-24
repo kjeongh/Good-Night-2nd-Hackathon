@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { DateBase } from '../../../common/base.entity';
 import { Genre } from '../enums/movie.genre.enum';
-import { GetMovieResDto } from '../dto/get-movie.dto';
+import { GetMovieDto } from '../dto/get-movie.dto';
 import { Review } from '../../review/entities/review.entity';
+import { UpdateMovieDto } from '../dto/update-movie.dto';
 
 @Entity('movies')
 export class Movie extends DateBase {
@@ -11,45 +12,34 @@ export class Movie extends DateBase {
 
   @Column({
     length: 50,
-    nullable: false,
   })
   title: string;
 
-  @Column({ nullable: false })
+  @Column()
   description: string;
 
   @Column({
     type: 'enum',
     enum: Genre,
-    nullable: false,
   })
   genre: Genre;
 
   @Column({
     default: true,
-    nullable: false,
   })
   isShowing: boolean;
 
-  @Column({ nullable: false })
+  @Column()
   releaseDate: Date;
 
-  @Column({ nullable: false })
+  @Column()
   endDate: Date;
 
   @OneToMany(() => Review, (review) => review.movie)
   reviews: Review[];
-
-  public static toDto(entity: Movie): GetMovieResDto {
-    const resDto = new GetMovieResDto();
-
-    resDto.title = entity.title;
-    resDto.description = entity.description;
-    resDto.genre = entity.genre;
-    resDto.isShowing = entity.isShowing;
-    resDto.releaseDate = entity.releaseDate;
-    resDto.endDate = entity.endDate;
-
-    return resDto;
+  public update(updateMovieDto: Partial<UpdateMovieDto>) {
+    for (const key in updateMovieDto) {
+      this[key] = updateMovieDto[key];
+    }
   }
 }

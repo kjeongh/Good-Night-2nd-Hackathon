@@ -4,6 +4,8 @@ import { MoreThanOrEqual, Repository } from 'typeorm';
 import { Review } from './entities/review.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { MovieRepository } from '../movie/movie.repository';
+import { GetReviewDto } from './dto/get-review.dto';
+import { count } from 'rxjs';
 
 @Injectable()
 export class ReviewService {
@@ -15,13 +17,15 @@ export class ReviewService {
     private movieRepository: MovieRepository,
   ) {}
 
-  async create(createReviewDto: CreateReviewDto): Promise<any> {
+  async create(createReviewDto: CreateReviewDto): Promise<Review> {
     try {
-      const movie = await this.movieRepository.findOneByOrFail({
-        id: createReviewDto.movieId,
+      const isValidMovieId = await this.movieRepository.exist({
+        where: { id: createReviewDto.movieId },
       });
-      const entity = CreateReviewDto.toEntity(createReviewDto, movie);
-      return await this.reviewRepository.save(entity);
+      if (!isValidMovieId) console.log('test');
+
+      const entity = CreateReviewDto.toEntity(createReviewDto);
+      return Promise.resolve(await this.reviewRepository.save(entity));
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
@@ -30,12 +34,14 @@ export class ReviewService {
   async getList(movieId: number, minRating: number): Promise<any> {
     try {
       const [reviewList, count] = await this.reviewRepository.findAndCount({
-        where: { movie: { id: movieId }, rating: MoreThanOrEqual(minRating) },
-        relations: ['movie'], //TODO: movie 로드 ?
+        where: { movieId: movieId, rating: MoreThanOrEqual(minRating) },
       });
 
-      const filteredReviewList = reviewList.map((review) => review.toDto());
-      return { count, filteredReviewList };
+      const filteredReviewList = reviewList.map((review) =>
+        GetReviewDto.of(review),
+      );
+
+      return Promise.resolve({ count, filteredReviewList });
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }
