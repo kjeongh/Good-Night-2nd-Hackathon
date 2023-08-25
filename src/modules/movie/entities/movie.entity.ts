@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { DateBase } from '../../../common/base.entity';
+import { DateBase } from '../../../global/base.entity';
 import { Genre } from '../enums/movie.genre.enum';
 import { GetMovieDto } from '../dto/get-movie.dto';
 import { Review } from '../../review/entities/review.entity';

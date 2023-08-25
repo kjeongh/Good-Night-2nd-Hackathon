@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
-import { DateBase } from '../../../common/base.entity';
+import { DateBase } from '../../../global/base.entity';
 import { Movie } from '../../movie/entities/movie.entity';
 import { GetMovieDto } from '../../movie/dto/get-movie.dto';
 import { GetReviewDto } from '../dto/get-review.dto';

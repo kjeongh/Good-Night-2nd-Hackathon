@@ -1,11 +1,5 @@
 import { Genre } from '../enums/movie.genre.enum';
-import {
-  IsBoolean,
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsString } from 'class-validator';
 import { Movie } from '../entities/movie.entity';
 
 export class CreateMovieDto {

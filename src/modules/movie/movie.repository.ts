@@ -8,15 +8,6 @@ export class MovieRepository extends Repository<Movie> {
     super(Movie, dataSource.createEntityManager());
   }
 
-  // async getMovieAvgList(): Promise<any> {
-  //   return this.createQueryBuilder('movie')
-  //     .leftJoin('movie.reviews', 'review')
-  //     .addSelect('ROUND(AVG(review.rating), 2)', 'ratingAvg')
-  //     .groupBy('movie.id')
-  //     .orderBy('ratingAvg', 'DESC')
-  //     .getRawMany();
-  // }
-
   async getMovieAvgList(): Promise<any> {
     return Promise.resolve(
       this.createQueryBuilder('movie')

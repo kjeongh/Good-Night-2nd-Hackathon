@@ -18,20 +18,12 @@ export class MovieService {
   ) {}
 
   async create(createMovieDto: CreateMovieDto): Promise<Movie> {
-    try {
-      const entity = CreateMovieDto.toEntity(createMovieDto);
-      return Promise.resolve(await this.movieRepository.save(entity));
-    } catch (e) {
-      console.log(e); //TODO: 에러핸들링
-    }
+    const entity = CreateMovieDto.toEntity(createMovieDto);
+    return Promise.resolve(await this.movieRepository.save(entity));
   }
 
   async delete(id: number) {
-    try {
-      await this.movieRepository.softDelete({ id });
-    } catch (e) {
-      console.log(e); //TODO: 에러핸들링
-    }
+    await this.movieRepository.softDelete({ id }); //TODO: notfound
   }
 
   async update(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
@@ -46,13 +38,9 @@ export class MovieService {
   }
 
   async get(id: number): Promise<GetMovieDto> {
-    try {
-      const movie = await this.movieRepository.findOneByOrFail({ id });
+    const movie = await this.movieRepository.findOneByOrFail({ id });
 
-      return Promise.resolve(GetMovieDto.of(movie));
-    } catch (e) {
-      console.log(e); //TODO: 에러핸들링
-    }
+    return Promise.resolve(GetMovieDto.of(movie));
   }
 
   async getList(genre: Genre, isShowing: boolean): Promise<any> {
@@ -73,7 +61,9 @@ export class MovieService {
 
   async getListPage(): Promise<any> {
     try {
-      return Promise.resolve(await this.movieRepository.getMovieAvgList());
+      const movies = await this.movieRepository.getMovieAvgList();
+
+      return Promise.resolve(movies);
     } catch (e) {
       console.log(e); //TODO: 에러핸들링
     }

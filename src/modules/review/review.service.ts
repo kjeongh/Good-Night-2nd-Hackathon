@@ -35,6 +35,7 @@ export class ReviewService {
     try {
       const [reviewList, count] = await this.reviewRepository.findAndCount({
         where: { movieId: movieId, rating: MoreThanOrEqual(minRating) },
+        order: { rating: 'DESC' },
       });
 
       const filteredReviewList = reviewList.map((review) =>
