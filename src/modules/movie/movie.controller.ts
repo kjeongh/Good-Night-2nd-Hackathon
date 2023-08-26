@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -44,15 +45,8 @@ export class MovieController {
     return await this.movieService.update(id, updateMovieDto);
   }
 
-  // 기능4: 영화 단일 조회
-  @Get('/:id([\\d]+)')
-  @HttpCode(200)
-  async get(@Param('id') id: number): Promise<GetMovieDto> {
-    return await this.movieService.get(id);
-  }
-
   // 기능 5: 영화 목록 조회
-  @Get()
+  @Get('/list')
   @HttpCode(200)
   async getList(
     @Query('genre') genre: Genre,
@@ -64,9 +58,17 @@ export class MovieController {
   // 기능 6: 영화 목록 평점순 조회 (페이지네이션)
   @Get('/rating')
   @HttpCode(200)
-  async getListPage() // @Query('limit') limit: number,
-  // @Query('page') page: number,
-  : Promise<any> {
-    return await this.movieService.getListPage();
+  async getListPage(
+    @Query('take') take: number,
+    @Query('page') page: number,
+  ): Promise<any> {
+    return await this.movieService.getListPage({ take, page });
+  }
+
+  // 기능4: 영화 단일 조회
+  @Get('/:id')
+  @HttpCode(200)
+  async get(@Param('id') id: number): Promise<GetMovieDto> {
+    return await this.movieService.get(id);
   }
 }

@@ -1,12 +1,12 @@
-import { Review } from '../entities/review.entity';
-import { Movie } from '../../movie/entities/movie.entity';
+import { Review } from '../review.entity';
+import { Movie } from '../../movie/movie.entity';
 import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class CreateReviewDto {
   @IsInt()
   movieId!: number;
 
-  @IsInt()
+  @IsNumber()
   @Min(0)
   @Max(5)
   rating!: number;

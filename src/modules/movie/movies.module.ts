@@ -2,7 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieService } from './movie.service';
 import { Module, ValidationPipe } from '@nestjs/common';
 import { MovieController } from './movie.controller';
-import { Movie } from './entities/movie.entity';
+import { Movie } from './movie.entity';
 import { DataSource } from 'typeorm';
 import { MovieRepository } from './movie.repository';
 import { APP_PIPE } from '@nestjs/core';

@@ -1,4 +1,4 @@
-import { Review } from '../entities/review.entity';
+import { Review } from '../review.entity';
 
 export class GetReviewDto {
   movieId: number;

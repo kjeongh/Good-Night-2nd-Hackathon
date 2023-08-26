@@ -1,5 +1,5 @@
 import { Genre } from '../enums/movie.genre.enum';
-import { Movie } from '../entities/movie.entity';
+import { Movie } from '../movie.entity';
 
 export class GetMovieDto {
   title: string;

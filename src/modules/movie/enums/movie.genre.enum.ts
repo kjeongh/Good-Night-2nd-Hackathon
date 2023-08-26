@@ -4,4 +4,3 @@ export enum Genre {
   COMIC = 'comic',
   ACTION = 'action',
 }
-//TODO: Enum 파이프라인

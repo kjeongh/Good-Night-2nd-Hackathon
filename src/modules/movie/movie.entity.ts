@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { DateBase } from '../../../global/base.entity';
-import { Genre } from '../enums/movie.genre.enum';
-import { GetMovieDto } from '../dto/get-movie.dto';
-import { Review } from '../../review/entities/review.entity';
-import { UpdateMovieDto } from '../dto/update-movie.dto';
+import { DateBase } from '../../global/base.entity';
+import { Genre } from './enums/movie.genre.enum';
+import { GetMovieDto } from './dto/get-movie.dto';
+import { Review } from '../review/review.entity';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Entity('movies')
 export class Movie extends DateBase {
@@ -35,7 +35,7 @@ export class Movie extends DateBase {
   @Column()
   endDate: Date;
 
-  @OneToMany(() => Review, (review) => review.movie)
+  @OneToMany(() => Review, (review) => review.movie, { cascade: true })
   reviews: Review[];
   public update(updateMovieDto: Partial<UpdateMovieDto>) {
     for (const key in updateMovieDto) {

@@ -12,60 +12,43 @@ import {
 import { Request, Response } from 'express';
 import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
-@Catch()
 @Injectable()
+@Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly log = new Logger(GlobalExceptionFilter.name, {
     timestamp: true,
   });
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = (exception as any).message;
-    let code = 'HttpException';
 
-    console.log(exception);
+    let status;
+    let message = (exception as any).message || 'Internal Server Error';
+    let code = (exception as any).code;
 
-    switch (exception.constructor) {
-      case HttpException:
-        status = (exception as HttpException).getStatus();
-        break;
-
-      case QueryFailedError:
-        status = HttpStatus.UNPROCESSABLE_ENTITY;
-        message = (exception as QueryFailedError).message;
-        code = (exception as any).code;
-        break;
-
-      case EntityNotFoundError:
-        status = HttpStatus.NOT_FOUND;
-        message = (exception as EntityNotFoundError).message;
-        code = (exception as any).code;
-        break;
-
-      case NotFoundException:
-        status = HttpStatus.NOT_FOUND;
-        message = (exception as NotFoundException).message;
-        code = (exception as any).code;
-        break;
-
-      case BadRequestException:
-        status = HttpStatus.BAD_REQUEST;
-        message = (exception as any).message;
-        code = (exception as any).code;
-        break;
-
-      default:
-        status = HttpStatus.INTERNAL_SERVER_ERROR;
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+    } else if (exception instanceof QueryFailedError) {
+      status = HttpStatus.UNPROCESSABLE_ENTITY;
+    } else if (exception instanceof EntityNotFoundError) {
+      status = HttpStatus.NOT_FOUND;
+    } else if (exception instanceof NotFoundException) {
+      status = HttpStatus.NOT_FOUND;
+    } else if (exception instanceof BadRequestException) {
+      status = HttpStatus.BAD_REQUEST;
+      message =
+        (exception.getResponse() as any).message || 'Bad Request Exception'; // 변경된 부분
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    this.log.error(`[${status}] | exception`);
+    this.log.error(`[${status}] ${message} | Path: ${request.url}`);
 
     response.status(status).json({
       statusCode: status,
-      message: (exception as any).message,
+      message: message,
       timestamp: new Date().toISOString(),
       path: request.url,
     });

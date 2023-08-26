@@ -2,6 +2,7 @@ import { Genre } from '../enums/movie.genre.enum';
 import {
   IsBoolean,
   IsDate,
+  IsDateString,
   IsEnum,
   IsOptional,
   IsString,
@@ -24,11 +25,11 @@ export class UpdateMovieDto {
   @IsOptional()
   isShowing?: boolean;
 
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   releaseDate?: Date;
 
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   endDate?: Date;
 }

@@ -1,17 +1,34 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { GlobalExceptionFilter } from './global/filter/http-exception.filter';
-import { ValidationPipe } from '@nestjs/common';
+import {
+  GlobalExceptionFilter,
+  ValidationExceptionFilter,
+} from './global/filter/http-exception.filter';
+import { BadRequestException, Logger, ValidationPipe } from '@nestjs/common';
+import { ValidationError } from 'class-validator';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // global exception handler 설정
+  const log = new Logger(GlobalExceptionFilter.name, {
+    timestamp: true,
+  });
+
+  // exception handler 설정
+  app.useGlobalFilters(new ValidationExceptionFilter());
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   // validator 설정
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      validationError: {
+        target: true,
+        value: true,
+      },
+    }),
+  );
 
   // Swagger 설정
   const config = new DocumentBuilder()

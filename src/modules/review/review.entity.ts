@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   RelationId,
 } from 'typeorm';
-import { DateBase } from '../../../global/base.entity';
-import { Movie } from '../../movie/entities/movie.entity';
-import { GetMovieDto } from '../../movie/dto/get-movie.dto';
-import { GetReviewDto } from '../dto/get-review.dto';
+import { DateBase } from '../../global/base.entity';
+import { Movie } from '../movie/movie.entity';
+import { GetMovieDto } from '../movie/dto/get-movie.dto';
+import { GetReviewDto } from './dto/get-review.dto';
 
 @Entity('reviews')
 export class Review extends DateBase {

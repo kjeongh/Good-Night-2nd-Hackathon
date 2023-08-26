@@ -1,11 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThanOrEqual, Repository } from 'typeorm';
-import { Review } from './entities/review.entity';
+import {
+  EntityNotFoundError,
+  IsNull,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
+import { Review } from './review.entity';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { MovieRepository } from '../movie/movie.repository';
 import { GetReviewDto } from './dto/get-review.dto';
-import { count } from 'rxjs';
 
 @Injectable()
 export class ReviewService {
@@ -18,33 +22,25 @@ export class ReviewService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto): Promise<Review> {
-    try {
-      const isValidMovieId = await this.movieRepository.exist({
-        where: { id: createReviewDto.movieId },
-      });
-      if (!isValidMovieId) console.log('test');
+    const isValidMovieId = await this.movieRepository.exist({
+      where: { id: createReviewDto.movieId, deletedAt: IsNull() },
+    });
+    if (!isValidMovieId) throw new NotFoundException('movieId is invalid');
 
-      const entity = CreateReviewDto.toEntity(createReviewDto);
-      return Promise.resolve(await this.reviewRepository.save(entity));
-    } catch (e) {
-      console.log(e); //TODO: 에러핸들링
-    }
+    const entity = CreateReviewDto.toEntity(createReviewDto);
+    return Promise.resolve(await this.reviewRepository.save(entity));
   }
 
   async getList(movieId: number, minRating: number): Promise<any> {
-    try {
-      const [reviewList, count] = await this.reviewRepository.findAndCount({
-        where: { movieId: movieId, rating: MoreThanOrEqual(minRating) },
-        order: { rating: 'DESC' },
-      });
+    const [reviewList, count] = await this.reviewRepository.findAndCount({
+      where: { movieId: movieId, rating: MoreThanOrEqual(minRating) },
+      order: { rating: 'DESC' },
+    });
 
-      const filteredReviewList = reviewList.map((review) =>
-        GetReviewDto.of(review),
-      );
+    const filteredReviewList = reviewList.map((review) =>
+      GetReviewDto.of(review),
+    );
 
-      return Promise.resolve({ count, filteredReviewList });
-    } catch (e) {
-      console.log(e); //TODO: 에러핸들링
-    }
+    return Promise.resolve({ count, filteredReviewList });
   }
 }

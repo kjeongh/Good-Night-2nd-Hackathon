@@ -1,9 +1,15 @@
 import { Genre } from '../enums/movie.genre.enum';
-import { IsBoolean, IsDate, IsEnum, IsString } from 'class-validator';
-import { Movie } from '../entities/movie.entity';
+import {
+  IsBoolean,
+  IsDate,
+  IsDateString,
+  IsEnum,
+  IsString,
+} from 'class-validator';
+import { Movie } from '../movie.entity';
 
 export class CreateMovieDto {
-  @IsString()
+  @IsString({ message: 'invalid movie dto' })
   title!: string;
 
   @IsString()
@@ -15,10 +21,10 @@ export class CreateMovieDto {
   @IsBoolean()
   isShowing!: boolean;
 
-  @IsDate()
+  @IsDateString()
   releaseDate!: Date;
 
-  @IsDate()
+  @IsDateString()
   endDate!: Date;
 
   public static toEntity(createMovieDto: CreateMovieDto): Movie {
